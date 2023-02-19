@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  mi-mysql:
+    container_name: mi-mysql
+    image: mysql
+    networks:
+      mi-mysql-red:
+        ipv4_address: 172.25.0.10
+    volumes:
+      - mi-mysql-vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    restart: always
+
+  mi-dashboard:
+  container_name: mi-dashboard
+    image: phpmyadmin
+    networks:
+      mi-mysql-red:
+        ipv4_address: 172.25.0.20
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mi-mysql
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mi-mysql
+    restart: always
+
+networks:
+  mi-mysql-red:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+volumes:
+  mi-mysql-vol:

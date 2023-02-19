@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  mi-mongo:
+    container_name: mi-mongo
+    image: mongo
+    networks:
+      mi-red:
+        ipv4_address: 172.24.0.10
+    ports:
+      - 27017:27017
+    volumes:
+      - mi-volumen:/data/db
+    restart: always
+
+  mi-mongo-express:
+    container_name: mi-mongo-express
+    image: mongo-express
+    networks:
+      mi-red:
+        ipv4_address: 172.24.0.20
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mi-mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+    volumes:
+      - mi-volumen:/data/db
+    depends_on:
+      - mi-mongo
+    restart: always
+
+networks:
+  mi-red:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+
+volumes:
+  mi-volumen:
