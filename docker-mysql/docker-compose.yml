@@ -15,7 +15,7 @@ services:
     restart: always
 
   mi-dashboard:
-  container_name: mi-dashboard
+    container_name: mi-dashboard
     image: phpmyadmin
     networks:
       mi-mysql-red:
